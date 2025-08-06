@@ -48,56 +48,10 @@ jobs:
         # Find all built modules
         find . -name "*.cpython*.so" -o -name "arx_r5_python.so" -o -name "kinematic_solver.so" | head -20
 
-    - name: Build distribution
+    - name: Build distribution using existing setup.py
       run: |
-        # Use a simple setup.py that just packages files
-        cat > setup_package.py << 'EOF'
-import os
-from setuptools import setup, find_packages
-
-with open("README.md", "r", encoding="utf-8") as fh:
-    long_description = fh.read()
-
-setup(
-    name="vassar-arx-r5-sdk",
-    version="0.1.0",
-    author="ARXrobotics (packaged by Vassar CS Department)",
-    author_email="cs@vassar.edu",
-    description="Python SDK for ARX R5 Robot Arm Control",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    url="https://github.com/ARXroboticsX/R5",
-    packages=find_packages(include=['vassar_arx_r5_sdk', 'vassar_arx_r5_sdk.*']),
-    package_data={
-        'vassar_arx_r5_sdk': [
-            '**/*.so',
-            '**/*.hpp',
-            '**/*.h',
-            '**/*.py',
-            '**/*.urdf',
-            '**/*.txt',
-            '**/*.sh',
-        ]
-    },
-    include_package_data=True,
-    python_requires=">=3.10",
-    install_requires=[
-        "numpy>=1.19.0",
-    ],
-    classifiers=[
-        "Development Status :: 3 - Alpha",
-        "Intended Audience :: Developers", 
-        "Topic :: Scientific/Engineering :: Robotics",
-        "License :: OSI Approved :: BSD License",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3.12",
-        "Operating System :: POSIX :: Linux",
-    ],
-)
-EOF
-        python setup_package.py sdist bdist_wheel
+        # Just use the existing setup.py
+        python setup.py sdist bdist_wheel
 
     - name: Check distribution
       run: |
