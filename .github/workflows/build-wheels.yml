@@ -65,6 +65,8 @@ jobs:
           # Update package manager and install cmake
           yum update -y --nogpgcheck || true
           yum install -y cmake --nogpgcheck || yum install -y cmake3 --nogpgcheck
+        CIBW_BEFORE_BUILD: |
+          pip install pybind11
         CIBW_ENVIRONMENT: |
           CMAKE_BUILD_PARALLEL_LEVEL=4
       run: python -m cibuildwheel --output-dir wheelhouse
