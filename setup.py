@@ -93,7 +93,7 @@ setup(
     include_package_data=True,
     ext_modules=[CMakeExtension('vassar_arx_r5_sdk.bimanual', 'vassar_arx_r5_sdk/bimanual')],
     cmdclass=dict(build_ext=CMakeBuild),
-    python_requires=">=3.6",
+    python_requires=">=3.10",  # Ubuntu 22.04 LTS and newer
     install_requires=[
         "numpy>=1.19.0",
     ],
@@ -109,12 +109,12 @@ setup(
         "Topic :: Scientific/Engineering :: Robotics",
         "License :: OSI Approved :: BSD License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Operating System :: POSIX :: Linux",
+        "Operating System :: Ubuntu :: 22.04",
+        "Operating System :: Ubuntu :: 24.04",
     ],
     keywords="robotics, robot arm, ARX, R5, control",
     project_urls={

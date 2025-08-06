@@ -4,8 +4,8 @@ Python SDK for controlling ARX R5 robot arms via CAN interface on Linux systems.
 
 ## System Requirements
 
-- **Operating System**: Linux (Ubuntu 18.04+ recommended)
-- **Python**: 3.6 or higher
+- **Operating System**: Ubuntu 22.04 LTS or Ubuntu 24.04 LTS
+- **Python**: 3.10, 3.11, or 3.12
 - **Hardware**: ARX R5 robot arm with CAN interface
 - **Architecture**: x86_64 or ARM64/aarch64
 

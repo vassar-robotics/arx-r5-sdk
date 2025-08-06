@@ -22,29 +22,26 @@ jobs:
     strategy:
       matrix:
         include:
-          - python-version: '3.8'
-            cibw-python: 'cp38'
-            architecture: 'x86_64'
-          - python-version: '3.8'
-            cibw-python: 'cp38'
-            architecture: 'aarch64'
-          - python-version: '3.9'
-            cibw-python: 'cp39'
-            architecture: 'x86_64'
-          - python-version: '3.9'
-            cibw-python: 'cp39'
-            architecture: 'aarch64'
+          # Python 3.10 - Default on Ubuntu 22.04, available on 24.04
           - python-version: '3.10'
             cibw-python: 'cp310'
             architecture: 'x86_64'
           - python-version: '3.10'
             cibw-python: 'cp310'
             architecture: 'aarch64'
+          # Python 3.11 - Available on both Ubuntu 22.04 and 24.04
           - python-version: '3.11'
             cibw-python: 'cp311'
             architecture: 'x86_64'
           - python-version: '3.11'
             cibw-python: 'cp311'
+            architecture: 'aarch64'
+          # Python 3.12 - Default on Ubuntu 24.04
+          - python-version: '3.12'
+            cibw-python: 'cp312'
+            architecture: 'x86_64'
+          - python-version: '3.12'
+            cibw-python: 'cp312'
             architecture: 'aarch64'
     
     steps:
@@ -71,11 +68,9 @@ jobs:
         CIBW_BUILD: ${{ matrix.cibw-python }}-manylinux_${{ matrix.architecture }}
         CIBW_ARCHS_LINUX: ${{ matrix.architecture }}
         CIBW_BEFORE_ALL_LINUX: |
-          # Fix CentOS 7 EOL issue
-          sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
-          sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
-          yum install -y epel-release || true
-          yum install -y cmake3 || yum install -y cmake
+          # Update package manager and install cmake
+          yum update -y --nogpgcheck || true
+          yum install -y cmake --nogpgcheck || yum install -y cmake3 --nogpgcheck
         CIBW_ENVIRONMENT: |
           CMAKE_BUILD_PARALLEL_LEVEL=4
         CIBW_TEST_REQUIRES: pytest
@@ -120,7 +115,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11']
+        python-version: ['3.10', '3.11', '3.12']
     
     steps:
     - uses: actions/download-artifact@v4
