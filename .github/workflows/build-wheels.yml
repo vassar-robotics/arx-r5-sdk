@@ -65,6 +65,10 @@ jobs:
         CIBW_BUILD: ${{ matrix.cibw-python }}-manylinux_${{ matrix.architecture }}
         CIBW_ARCHS_LINUX: ${{ matrix.architecture }}
         CIBW_BEFORE_ALL_LINUX: |
+          # Fix CentOS 7 EOL issue
+          sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+          sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+          yum install -y epel-release || true
           yum install -y cmake3 || yum install -y cmake
         CIBW_ENVIRONMENT: |
           CMAKE_BUILD_PARALLEL_LEVEL=4

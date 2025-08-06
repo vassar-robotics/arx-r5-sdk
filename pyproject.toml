@@ -80,6 +80,6 @@ before-all = [
 test-command = "python -c 'import vassar_arx_r5_sdk'"
 
 [tool.cibuildwheel.linux]
-# Use manylinux2014 for better compatibility
-manylinux-x86_64-image = "manylinux2014"
-manylinux-aarch64-image = "manylinux2014"
+# Use manylinux_2_28 for newer systems with better package support
+manylinux-x86_64-image = "manylinux_2_28"
+manylinux-aarch64-image = "manylinux_2_28"
