@@ -33,6 +33,8 @@ pip install pybind11
 
 ### Install from PyPI (Recommended)
 
+Pre-built wheels are available for Ubuntu 22.04 and 24.04 LTS:
+
 ```bash
 pip install vassar-arx-r5-sdk
 ```

@@ -31,13 +31,6 @@ class CMakeBuild(build_ext):
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
         
-        # Copy the source directory to build_temp to ensure all files are available
-        import shutil
-        build_sourcedir = os.path.join(self.build_temp, 'source')
-        if os.path.exists(build_sourcedir):
-            shutil.rmtree(build_sourcedir)
-        shutil.copytree(ext.sourcedir, build_sourcedir)
-        
         # CMake arguments
         cmake_args = [
             f'-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}',
@@ -48,8 +41,8 @@ class CMakeBuild(build_ext):
         # Build arguments
         build_args = ['--config', 'Release', '--', '-j4']
         
-        # Configure and build from the copied source
-        subprocess.check_call(['cmake', build_sourcedir] + cmake_args, cwd=self.build_temp)
+        # Configure and build
+        subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=self.build_temp)
         subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
         
         # Copy the built modules to the package directory
