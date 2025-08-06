@@ -1,0 +1,8 @@
+# Development dependencies
+pybind11>=2.6.0
+cmake>=3.18
+numpy>=1.19.0
+wheel
+setuptools>=45
+twine
+cibuildwheel

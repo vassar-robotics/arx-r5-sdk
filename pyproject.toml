@@ -1,0 +1,85 @@
+[build-system]
+requires = [
+    "setuptools>=45",
+    "wheel",
+    "pybind11>=2.6.0",
+    "cmake>=3.18",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vassar-arx-r5-sdk"
+version = "0.1.0"
+description = "Python SDK for ARX R5 Robot Arm Control"
+readme = "README.md"
+requires-python = ">=3.6"
+license = {text = "BSD-3-Clause"}
+authors = [
+    {name = "ARXrobotics", email = "contact@arx-x.com"},
+]
+maintainers = [
+    {name = "Vassar"},
+]
+keywords = ["robotics", "robot arm", "ARX", "R5", "control"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering :: Robotics",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: POSIX :: Linux",
+]
+dependencies = [
+    "numpy>=1.19.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/ARXroboticsX/R5"
+"Bug Reports" = "https://github.com/ARXroboticsX/R5/issues"
+Source = "https://github.com/ARXroboticsX/R5"
+
+[project.optional-dependencies]
+dev = [
+    "pybind11>=2.6.0",
+    "cmake>=3.18",
+]
+
+[tool.setuptools.packages.find]
+include = ["vassar_arx_r5_sdk*"]
+
+[tool.setuptools.package-data]
+vassar_arx_r5_sdk = [
+    "bimanual/script/*.urdf",
+    "bimanual/lib/*.so",
+    "bimanual/lib/*.hpp",
+    "bimanual/lib/arx_r5_src/*.so",
+    "bimanual/lib/arx_r5_src/include/**/*",
+    "bimanual/lib/arx_hardware_interface/include/**/*",
+    "bimanual/src/*.cpp",
+    "bimanual/CMakeLists.txt",
+    "bimanual/build.sh",
+]
+
+[tool.cibuildwheel]
+# Only build for Linux
+build = "cp3*-manylinux_x86_64 cp3*-manylinux_aarch64"
+skip = "cp36-* cp37-* *-musllinux_*"
+
+# Install system dependencies in the build container
+before-all = [
+    "yum install -y cmake3 || yum install -y cmake",
+]
+
+# Test that the package can be imported
+test-command = "python -c 'import vassar_arx_r5_sdk'"
+
+[tool.cibuildwheel.linux]
+# Use manylinux2014 for better compatibility
+manylinux-x86_64-image = "manylinux2014"
+manylinux-aarch64-image = "manylinux2014"

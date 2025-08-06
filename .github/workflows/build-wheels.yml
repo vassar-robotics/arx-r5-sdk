@@ -1,0 +1,103 @@
+name: Build Linux Wheels
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build_wheels:
+    name: Build wheels on Linux
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+        architecture: ['x86_64', 'aarch64']
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Set up QEMU
+      if: matrix.architecture == 'aarch64'
+      uses: docker/setup-qemu-action@v2
+      with:
+        platforms: arm64
+    
+    - name: Install cibuildwheel
+      run: python -m pip install cibuildwheel==2.16.2
+    
+    - name: Build wheels
+      env:
+        CIBW_BUILD: cp${{ matrix.python-version }}-manylinux_${{ matrix.architecture }}
+        CIBW_ARCHS_LINUX: ${{ matrix.architecture }}
+        CIBW_BEFORE_ALL_LINUX: |
+          yum install -y cmake3 || yum install -y cmake
+        CIBW_ENVIRONMENT: |
+          CMAKE_BUILD_PARALLEL_LEVEL=4
+      run: python -m cibuildwheel --output-dir wheelhouse
+    
+    - uses: actions/upload-artifact@v3
+      with:
+        name: wheels-${{ matrix.python-version }}-${{ matrix.architecture }}
+        path: ./wheelhouse/*.whl
+
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install setuptools wheel pybind11
+    
+    - name: Build sdist
+      run: python setup.py sdist
+    
+    - uses: actions/upload-artifact@v3
+      with:
+        name: sdist
+        path: dist/*.tar.gz
+
+  upload_pypi:
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    # Only upload to PyPI on tagged releases
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    steps:
+    - uses: actions/download-artifact@v3
+      with:
+        path: dist
+    
+    - name: Flatten directory structure
+      run: |
+        mkdir -p final_dist
+        find dist -name "*.whl" -o -name "*.tar.gz" | xargs -I {} cp {} final_dist/
+        rm -rf dist
+        mv final_dist dist
+    
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_API_TOKEN }}
+        packages_dir: dist/
