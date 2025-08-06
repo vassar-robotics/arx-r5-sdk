@@ -15,6 +15,7 @@ recursive-include vassar_arx_r5_sdk *.urdf
 
 # Include pre-built libraries
 recursive-include vassar_arx_r5_sdk *.so
+recursive-include vassar_arx_r5_sdk/bimanual/lib/arx_r5_src *.so
 
 # Include header files
 recursive-include vassar_arx_r5_sdk/bimanual/lib/arx_r5_src/include *

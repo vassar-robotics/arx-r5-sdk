@@ -72,7 +72,15 @@ skip = "cp36-* cp37-* cp38-* cp39-* *-musllinux_*"
 # Install system dependencies in the build container
 before-all = [
     "yum update -y --nogpgcheck || true",
-    "yum install -y cmake --nogpgcheck || yum install -y cmake3 --nogpgcheck",
+    "yum install -y cmake gcc-c++ --nogpgcheck || yum install -y cmake3 gcc-c++ --nogpgcheck",
+    "git clone https://github.com/pybind/pybind11.git /tmp/pybind11",
+    "cd /tmp/pybind11 && cmake -B build -DPYBIND11_TEST=OFF",
+    "cd /tmp/pybind11/build && make -j4 && make install",
+]
+
+# Install Python dependencies before building
+before-build = [
+    "pip install pybind11 numpy",
 ]
 
 # Test that the package can be imported
