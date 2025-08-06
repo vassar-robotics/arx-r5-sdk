@@ -21,8 +21,31 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11']
-        architecture: ['x86_64', 'aarch64']
+        include:
+          - python-version: '3.8'
+            cibw-python: 'cp38'
+            architecture: 'x86_64'
+          - python-version: '3.8'
+            cibw-python: 'cp38'
+            architecture: 'aarch64'
+          - python-version: '3.9'
+            cibw-python: 'cp39'
+            architecture: 'x86_64'
+          - python-version: '3.9'
+            cibw-python: 'cp39'
+            architecture: 'aarch64'
+          - python-version: '3.10'
+            cibw-python: 'cp310'
+            architecture: 'x86_64'
+          - python-version: '3.10'
+            cibw-python: 'cp310'
+            architecture: 'aarch64'
+          - python-version: '3.11'
+            cibw-python: 'cp311'
+            architecture: 'x86_64'
+          - python-version: '3.11'
+            cibw-python: 'cp311'
+            architecture: 'aarch64'
     
     steps:
     - uses: actions/checkout@v3
@@ -45,7 +68,7 @@ jobs:
     
     - name: Build wheels
       env:
-        CIBW_BUILD: cp${{ matrix.python-version }}-manylinux_${{ matrix.architecture }}
+        CIBW_BUILD: ${{ matrix.cibw-python }}-manylinux_${{ matrix.architecture }}
         CIBW_ARCHS_LINUX: ${{ matrix.architecture }}
         CIBW_BEFORE_ALL_LINUX: |
           yum install -y cmake3 || yum install -y cmake
