@@ -55,13 +55,16 @@ include = ["vassar_arx_r5_sdk*"]
 vassar_arx_r5_sdk = [
     "bimanual/script/*.urdf",
     "bimanual/lib/*.so",
-    "bimanual/lib/*.hpp",
+    "bimanual/lib/*.hpp", 
     "bimanual/lib/arx_r5_src/*.so",
     "bimanual/lib/arx_r5_src/include/**/*",
     "bimanual/lib/arx_hardware_interface/include/**/*",
     "bimanual/src/*.cpp",
+    "bimanual/src/*.hpp",
     "bimanual/CMakeLists.txt",
     "bimanual/build.sh",
+    "setup.sh",
+    "build.sh",
 ]
 
 [tool.cibuildwheel]

@@ -3,7 +3,7 @@ project(arx_r5_python VERSION 1.0)
 
 find_package(pybind11 REQUIRED)
 
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/lib)
 include_directories(${PROJECT_SOURCE_DIR}/lib/arx_r5_src/include)
 include_directories(${PROJECT_SOURCE_DIR}/lib/arx_hardware_interface/include)
 
@@ -17,7 +17,7 @@ else ()
     set(DEPEND_LIB "${CMAKE_CURRENT_SOURCE_DIR}/lib/arx_r5_src/libarx_r5_src.so")
 endif ()
 
-target_include_directories(kinematic_solver PUBLIC lib/)
+# target_include_directories(kinematic_solver PUBLIC lib/) # Not needed, already included above
 target_link_libraries(${PROJECT_NAME} PUBLIC ${DEPEND_LIB} pybind11::module)
 target_link_libraries(kinematic_solver PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/libkinematic_solver.so pybind11::module)
 
