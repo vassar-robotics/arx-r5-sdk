@@ -20,3 +20,10 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${DEPEND_LIB} pybind11::module)
 target_link_libraries(kinematic_solver PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/arx_r5_sdk/lib/libkinematic_solver.so pybind11::module)
+
+set_target_properties(arx_r5_python PROPERTIES
+    INSTALL_RPATH "$ORIGIN"
+)
+set_target_properties(kinematic_solver PROPERTIES
+    INSTALL_RPATH "$ORIGIN"
+)
