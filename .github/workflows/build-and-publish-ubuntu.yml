@@ -50,6 +50,8 @@ jobs:
 
     - name: Build distribution using existing setup.py
       run: |
+        # Clean any old build artifacts first
+        rm -rf dist/ build/ *.egg-info/
         # Just use the existing setup.py
         python setup.py sdist bdist_wheel
 
