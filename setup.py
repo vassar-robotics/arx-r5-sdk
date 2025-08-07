@@ -12,15 +12,22 @@ class CMakeExtension(Extension):
 
 class CMakeBuild(build_ext):
     def run(self):
-        for ext in self.extensions:
-            self.build_extension(ext)
+        try:
+            import pybind11
+            pybind11_cmake_dir = pybind11.get_cmake_dir()
+        except ImportError:
+            pybind11_cmake_dir = ""
 
-    def build_extension(self, ext):
+        for ext in self.extensions:
+            self.build_extension(ext, pybind11_cmake_dir)
+
+    def build_extension(self, ext, pybind11_cmake_dir):
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
         
         cmake_args = [
             f'-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}',
             f'-DPYTHON_EXECUTABLE={sys.executable}',
+            f'-DCMAKE_PREFIX_PATH={pybind11_cmake_dir}'
         ]
 
         build_args = ['--config', 'Release']
@@ -37,7 +44,7 @@ setup(
     cmdclass={'build_ext': CMakeBuild},
     zip_safe=False,
     package_dir={'': 'py/ARX_R5_python/src'},
-    packages=['arx_r5_sdk'],
+    packages=['arx_r5_sdk', 'arx_r5_sdk.lib'],
     package_data={
         'arx_r5_sdk': [
             '*.urdf',
