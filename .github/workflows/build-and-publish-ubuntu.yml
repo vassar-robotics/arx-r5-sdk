@@ -52,6 +52,9 @@ jobs:
       run: |
         # Clean any old build artifacts first
         rm -rf dist/ build/ *.egg-info/
+        # Debug: Check the version in setup.py
+        echo "Checking version in setup.py:"
+        grep -n "version=" setup.py | head -5
         # Just use the existing setup.py
         python setup.py sdist bdist_wheel
 
