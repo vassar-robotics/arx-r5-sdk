@@ -60,6 +60,31 @@ class CMakeBuild(build_ext):
                     src = os.path.join(api_dir, filename)
                     dst = os.path.join(dst_dir, filename)
                     shutil.copy2(src, dst)
+        
+        # In manylinux environment, also copy the pre-built .so files
+        # These are needed because they're pre-compiled ARM libraries
+        lib_dir = os.path.join(ext.sourcedir, 'lib')
+        if os.path.exists(lib_dir):
+            dst_lib_dir = os.path.join(extdir, 'bimanual', 'lib')
+            os.makedirs(dst_lib_dir, exist_ok=True)
+            
+            # Copy lib/*.so files
+            for filename in os.listdir(lib_dir):
+                if filename.endswith('.so'):
+                    src = os.path.join(lib_dir, filename)
+                    dst = os.path.join(dst_lib_dir, filename)
+                    shutil.copy2(src, dst)
+            
+            # Copy lib/arx_r5_src/*.so files
+            arx_src_dir = os.path.join(lib_dir, 'arx_r5_src')
+            if os.path.exists(arx_src_dir):
+                dst_arx_dir = os.path.join(dst_lib_dir, 'arx_r5_src')
+                os.makedirs(dst_arx_dir, exist_ok=True)
+                for filename in os.listdir(arx_src_dir):
+                    if filename.endswith('.so'):
+                        src = os.path.join(arx_src_dir, filename)
+                        dst = os.path.join(dst_arx_dir, filename)
+                        shutil.copy2(src, dst)
 
 
 # Read the README file
@@ -69,7 +94,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="vassar-arx-r5-sdk",
-    version="0.2.1",
+    version="0.2.2",
     author="ARXrobotics",
     author_email="contact@arx-x.com",
     maintainer="Vassar",
