@@ -21,6 +21,7 @@ jobs:
         env:
           CIBW_ARCHS_LINUX: x86_64
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
+          CIBW_REPAIR_WHEEL_COMMAND_LINUX: "auditwheel repair -w {dest_dir} {wheel} --exclude libarx_r5_src.so --exclude libkinematic_solver.so"
 
       - uses: actions/upload-artifact@v4
         with:
