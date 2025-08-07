@@ -56,13 +56,14 @@ jobs:
         echo "Checking version in setup.py:"
         grep -n "version=" setup.py | head -5
         # Just use the existing setup.py
-        python setup.py sdist bdist_wheel
+        # Only build source distribution (sdist) since PyPI doesn't accept linux_x86_64 wheels
+        python setup.py sdist
 
     - name: Check distribution
       run: |
         ls -la dist/
-        # Test that we can install the package
-        pip install dist/*.whl
+        # Test that we can install the package from source
+        pip install dist/*.tar.gz
         # Check what was installed
         python -c "import vassar_arx_r5_sdk; print(vassar_arx_r5_sdk.__file__)"
         find $(python -c "import vassar_arx_r5_sdk; print(vassar_arx_r5_sdk.__path__[0])") -name "*.so" | head -20

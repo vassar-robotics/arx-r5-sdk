@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vassar-arx-r5-sdk"
-version = "0.2.0"
+version = "0.2.1"
 description = "Python SDK for ARX R5 Robot Arm Control"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -56,5 +56,8 @@ vassar_arx_r5_sdk = [
     "build.sh",
 ]
 
-# Note: This package is built directly on Ubuntu, not using manylinux
-# See .github/workflows/build-ubuntu-wheels.yml for the build process
+# Note: This package is distributed as source only (sdist) because:
+# 1. It contains pre-built .so files that are not manylinux compatible
+# 2. PyPI does not accept wheels with linux_x86_64 platform tags
+# 3. Users will need to have the required system dependencies installed
+# See .github/workflows/build-and-publish-ubuntu.yml for the build process
