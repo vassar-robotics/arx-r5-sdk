@@ -94,7 +94,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="vassar-arx-r5-sdk",
-    version="0.2.2",
+    version="0.2.3",
     author="ARXrobotics",
     author_email="contact@arx-x.com",
     maintainer="Vassar",

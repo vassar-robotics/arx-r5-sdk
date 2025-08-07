@@ -5,7 +5,7 @@ This package provides Python bindings for controlling ARX R5 robot arms
 using CAN interface on Linux systems.
 """
 
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 __author__ = "ARXrobotics"
 __license__ = "BSD-3-Clause"
 
