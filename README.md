@@ -11,38 +11,60 @@ Python SDK for controlling ARX R5 robot arms via CAN interface on Linux systems.
 
 ## Prerequisites
 
-### 1. CAN Interface Setup
+### 1. System Dependencies
 
-Install CAN utilities:
+All users must install these system dependencies before installing the package:
+
 ```bash
+# Update package list
 sudo apt update
+
+# Install CAN utilities (required for robot communication)
 sudo apt install can-utils net-tools
+
+# Install build tools (required for pip installation)
+sudo apt install cmake build-essential
 ```
 
-### 2. Build Dependencies (if building from source)
+### 2. Install pybind11 globally
+
+The package requires pybind11 to be installed globally via CMake:
 
 ```bash
-# Install CMake and build tools
-sudo apt install cmake build-essential
-
-# Install pybind11
-pip install pybind11
+# Clone and install pybind11
+git clone https://github.com/pybind/pybind11.git
+cd pybind11
+mkdir build && cd build
+cmake .. -DPYBIND11_TEST=OFF
+make -j4
+sudo make install
+cd ../..
+rm -rf pybind11  # Clean up
 ```
 
 ## Installation
 
-### Install from PyPI (Recommended)
+### Install from PyPI
 
-Pre-built wheels are available for Ubuntu 22.04 and 24.04 LTS:
+**Note**: This package is distributed as source only. The installation will compile C++ extensions on your system.
 
 ```bash
+# Install Python dependencies
+pip install numpy
+
+# Install the package (this will compile during installation)
 pip install vassar-arx-r5-sdk
 ```
+
+The installation process will:
+- Download the source package
+- Compile the C++ Python bindings
+- Install the package with pre-built ARM libraries
 
 ### Install from Source
 
 ```bash
-git clone https://github.com/yourusername/arx-r5-sdk.git
+git clone https://github.com/vassar-robotics/arx-r5-sdk.git
 cd arx-r5-sdk
 pip install .
 ```
@@ -136,7 +158,17 @@ Before running, ensure your CAN interface is properly configured:
 sudo ip link set can0 up type can bitrate 1000000
 ```
 
-### Troubleshooting
+### Installation Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| CMake not found error | Install with `sudo apt install cmake` |
+| pybind11 not found | Follow the pybind11 installation steps in Prerequisites |
+| Python.h not found | Install python3-dev package (e.g., `sudo apt install python3.10-dev`) |
+| Build fails during pip install | Ensure all prerequisites are installed, check gcc/g++ version |
+| Permission denied errors | Use `sudo` for system-wide installation or use virtual environment |
+
+### Runtime Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
@@ -144,6 +176,16 @@ sudo ip link set can0 up type can bitrate 1000000
 | CAN port won't open | Check connections, replug USB, re-enable CAN interface |
 | Motor connection failed | Reconnect base connector |
 | Program stuck at initialization | Ensure sufficient USB bandwidth, avoid sharing with WiFi dongles |
+
+## Why Source Distribution Only?
+
+This package is distributed as source code (sdist) rather than pre-built wheels because:
+
+1. **Hardware-specific libraries**: The package includes pre-compiled ARM control libraries (`.so` files) that are specific to the robot hardware
+2. **Platform compatibility**: PyPI only accepts manylinux wheels for Linux, not platform-specific wheels (like `linux_x86_64`)
+3. **Build customization**: Compiling from source ensures compatibility with your specific system configuration
+
+This means pip will compile the C++ extensions during installation, which is why the build dependencies are required.
 
 ## Examples
 
