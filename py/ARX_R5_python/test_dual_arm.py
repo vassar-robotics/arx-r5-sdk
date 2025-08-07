@@ -1,4 +1,4 @@
-from bimanual import SingleArm
+from arx_r5_sdk import SingleArm
 from typing import Dict, Any
 import numpy as np
 
@@ -9,9 +9,10 @@ def test_single_arm(single_arm0: SingleArm, single_arm1: SingleArm):
 
         success = single_arm0.set_ee_pose_xyzrpy(xyzrpy)
         success = single_arm1.set_ee_pose_xyzrpy(xyzrpy)
-
-        while(1):
-            print("testing ...")
+        
+        # while(1):
+        #     print("testing ...")
+        break
 
         #print(single_arm0.get_ee_pose())
         #print(single_arm0.get_joint_positions())
