@@ -106,18 +106,7 @@ setup(
             "cmake>=3.18",
         ]
     },
-    classifiers=[
-        "Development Status :: 3 - Alpha",
-        "Intended Audience :: Developers",
-        "Intended Audience :: Science/Research",
-        "Topic :: Scientific/Engineering",
-        "License :: OSI Approved :: BSD License",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3.12",
-        "Operating System :: POSIX :: Linux",
-    ],
+    classifiers=[],
     keywords="robotics, robot arm, ARX, R5, control",
     project_urls={
         "Bug Reports": "https://github.com/ARXroboticsX/R5/issues",
