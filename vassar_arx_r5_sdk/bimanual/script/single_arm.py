@@ -2,7 +2,19 @@ from typing import List, Tuple, Union, Optional, Dict, Any
 import numpy as np
 import os
 import sys
-import arx_r5_python as arx
+
+# Import the compiled module that was added to sys.path by __init__.py
+try:
+    import arx_r5_python as arx
+except ImportError:
+    # Fallback for development/testing
+    import sys
+    import os
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    api_dir = os.path.join(parent_dir, 'api', 'arx_r5_python')
+    if api_dir not in sys.path:
+        sys.path.insert(0, api_dir)
+    import arx_r5_python as arx
 
 
 def quaternion_to_euler(quat: np.ndarray) -> Tuple[float, float, float]:

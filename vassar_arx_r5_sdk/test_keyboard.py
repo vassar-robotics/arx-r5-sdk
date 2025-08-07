@@ -1,4 +1,4 @@
-from bimanual import SingleArm
+from vassar_arx_r5_sdk.bimanual import SingleArm
 from typing import Dict, Any
 import numpy as np
 import numpy.typing as npt

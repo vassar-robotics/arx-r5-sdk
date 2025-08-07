@@ -1,4 +1,4 @@
-import bimanual
+import vassar_arx_r5_sdk.bimanual as bimanual
 import numpy as np
 np.set_printoptions(suppress=True)
 
